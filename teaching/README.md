@@ -182,3 +182,44 @@ sudo docker run -v $PWD/data:/scripts/data my_image2 script.R -i /scripts/data/n
 ```
 
 With this command, we run non-interactively the R script, by using a bind mount on the local data directory and placing the mounted folder in the scripts directory inside the container. We use the local .txt file as input and save the results in the mounted directory, so we can check them localy once we have run the script using the container.
+
+## Task 10: upload image to DockerHub
+
+Once I created my account in DockerHub, I can login from console and push the image
+
+```bash
+docker login -u arodrigo23
+docker tag teachingimage arodrigo23/teachingimage
+docker push arodrigo23/teachingimage
+```
+
+## Task 11: Search DockerHub for `ggsashimi`
+
+Search DockerHub for images with the keyword `ggsashimi`, and pull the one built by `guigolab`. Then, try to reproduce the example depicted in the associated GitHub page.
+
+First, clone the repository:
+
+```bash
+git clone https://github.com/guigolab/ggsashimi.git
+```
+
+Then, move into the repository directory:
+
+```bash
+cd ggsashimi
+```
+
+Run the Docker command:
+
+```bash
+docker run -w $PWD -v $PWD:$PWD guigolab/ggsashimi \
+  -b examples/input_bams.tsv \
+  -c chr10:27040584-27048100
+```
+
+This command uses the example file `examples/input_bams.tsv` and generates a sashimi plot for the genomic region `chr10:27040584-27048100`.
+
+It yields the following result:
+
+![Sashimi plot generated with ggsashimi](ggsashimi/sashimi.png)
+
