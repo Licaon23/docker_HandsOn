@@ -1,0 +1,8 @@
+env
+.envrc
+*.pyc
+.pytest_cache
+.tox
+R_script
+*.pdf
+tmp
