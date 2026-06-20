@@ -41,7 +41,7 @@ ADD scripts/script.R /scripts
 sudo docker build -t teachingimage .
 ```
 
-Build an image from DockerFile, in the current directory, whose name Will be teachingimage.
+Build an image from DockerFile, in the current directory, whose name will be teachingimage.
 
 To check which images are available:
 
@@ -53,7 +53,7 @@ sudo docker images
 ## Task 3: from a given image, create a container
 
 ```bash
-sudo docker run imageName
+sudo docker run teachingimage
 ```
 
 
@@ -88,12 +88,12 @@ sudo docker rm $(sudo docker ps -a -q)
 
 In this exercise we want to run an R script to perform some work. To do so from anywhere we need to grant execution permissions and add the foler where the `script.R` is to the PATH environment were exectuables are searched.
 
-This need to be written in the image otherwise, if we do it interactively in the containers, changes Will not be saved once we exit the container.
+This need to be written in the image otherwise, if we do it interactively in the containers, changes will not be saved once we exit the container.
 
 Now, we can run the `script.R --help` not interactively as:
 
 ```bash
-sudo docker run my_image2 script.R --help
+sudo docker run teachingimage script.R --help
 ```
 
 
@@ -110,24 +110,24 @@ The function prints a summary, which I redirect to a file `summary.txt`.
 
 ## Task 8: use volumes to store results within the container
 
-### Here I had to create a dataset inside the container. But when I exit, it disappears...
+Here I had to create a dataset inside the container. But when I exit, it disappears...
 
-To run the script in the containers with a dataset outside it, we use volumes and bind mounts.
+To run the script in the containers with a dataset outside it, or to keep results after exiting cointainer,  we use volumes and bind mounts.
 
 First, we create a volumen, manage by docker: a folder
 
 ```bash
-sudo docker volumen create data
+sudo docker volume create data
 ```
 
 THen, connect the volumen to the container:
 
 ```bash
-sudo docker run -it -v data:/scripts/data my_image2
+sudo docker run -it -v data:/scripts/data teachingimage
 ```
 
 - `data` is the name of the volumen
-- `/scripts/data` is the directory where the host folder Will appear
+- `/scripts/data` is the directory where the host folder will appear
 
 Now, we créate the input data inseide the volum, run the script and store the results in the data directory. So it still exists once we exit and enter again.
 
@@ -141,30 +141,10 @@ quit()
 script.R -i scripts/data/input.txt -o scripts/data/hist.pdf > scripts/data/summary.txt
 ```
 
-TO check which columes are available:
+To check which volumes are available:
 
 ```bash
 sudo docker volumen ls
-```
-
-To inspect the content of a given volum:
-
-```bash
-sudo docker volume inspect data
-```
-
-```json
-[
-    {
-        "CreatedAt": "2026-03-28T19:07:10+01:00",
-        "Driver": "local",
-        "Labels": null,
-        "Mountpoint": "/var/lib/docker/volumes/data/_data",
-        "Name": "data",
-        "Options": null,
-        "Scope": "local"
-    }
-]
 ```
 
 Then check the directory Mountpoint:
@@ -180,14 +160,14 @@ total 32
 -rw-r--r-- 1 root root   144 Mar 28 19:12 summary.txt
 ```
 
-If I run the container without mounting the volumen, these data won't be there; otherwise, when mounted the volum, they Will be available.
+If I run the container without mounting the volumen, these data won't be there; otherwise, when mounted the volum, they will be available.
 
 
 ## Task 9: use bind mounts to use input data locally to run script.R within the container and store results locally
 
-### This serve to store the files generated within the container into a volumen stored in the host
+This serves to store the files generated within the container into a volumen stored in the host.
 
-Howver, how to use data from the host as intput for our software within the container?
+However, how to use data from the host as intput for our software within the container?
 
 Use bind mounts.
 
@@ -200,3 +180,5 @@ docker run -v <path/to/bind_mount/host>:<path/to/bind_mount/container> -w <worki
 ```bash
 sudo docker run -v $PWD/data:/scripts/data my_image2 script.R -i /scripts/data/normal.txt -o scripts/data/hist.pdf > results/summary.txt
 ```
+
+With this command, we run non-interactively the R script, by using a bind mount on the local data directory and placing the mounted folder in the scripts directory inside the container. We use the local .txt file as input and save the results in the mounted directory, so we can check them localy once we have run the script using the container.
