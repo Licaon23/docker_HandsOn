@@ -221,5 +221,5 @@ This command uses the example file `examples/input_bams.tsv` and generates a sas
 
 It yields the following result:
 
-![Sashimi plot generated with ggsashimi](ggsashimi/examples/sashimi.png)
+![Sashimi plot generated with ggsashimi](ggsashimi/examples/sashimi.tiff)
 
