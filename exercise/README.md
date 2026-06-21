@@ -35,5 +35,5 @@ docker run arodrigo23/seqclass:0.1 seqClass.py -s ACGT
 ### With motif search
 
 ```bash
-docker run arodrigo23/seqclass:python seqClass.py -s ACGTACGT -m GTA
+docker run arodrigo23/seqclass:0.1 seqClass.py -s ACGTACGT -m GTA
 ```
