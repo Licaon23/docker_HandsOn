@@ -7,7 +7,7 @@ LABEL maintainer="arodrigo <albert.rodrigo23@gmail.com>" \
       description="This is a hand-on exercise to practice Docker"
 
 # Install python 3 (after apt-get update)
-RUN apt-get update && apt-get install -y python3
+RUN apt-get update && apt-get install -y python3 python-is-python3
 
 # Make the folder '/scripts' in the container
 RUN mkdir /scripts
